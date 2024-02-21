@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 from math import ceil,sqrt, gcd
+from wheel_factorize import WheelFactor as WF # from https://github.com/mcastorina/wheel-factorization
+import time
 
 @profile
 def gen_primes(n):
@@ -27,7 +29,8 @@ def factorize(n,primes):
         while(n%p == 0):
             n = n/p
             factors.append(p)
-        if(p > sqrt(n)):
+   #     if(p > sqrt(n)):
+        if(p> sqrt(n)):
             break
     if(n > 1):
         factors.append(n)
@@ -50,11 +53,9 @@ def phi(n,primes):
     return p
 
 @profile
-def fast_phi(n,primes):
+def fast_phi(n,primes): #wastes 0.3s in total
     # we need to improve this function. It wastes 0.27 s to run
     factors = factorize(n,primes)
-    
-    #print(n, factors)
 
     phi = factors[0]-1
     for i in range(1,len(factors)):
@@ -69,8 +70,9 @@ primes = gen_primes(1000)
 m = 10000
 #m = 8
 fraq = 0
-for i in range(2,m+1):
-    
-    fraq += fast_phi(i,primes)
+wf = WF(3)
 
+for i in range(2,m+1):
+    fraq += fast_phi(i,primes)
+    
 print(fraq)
